@@ -6,7 +6,6 @@ import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
@@ -16,10 +15,10 @@ import com.plcoding.spotifycloneyt.data.entities.Song
 import com.plcoding.spotifycloneyt.databinding.ActivityMainBinding
 import com.plcoding.spotifycloneyt.exoplayer.isPlaying
 import com.plcoding.spotifycloneyt.exoplayer.toSong
-import com.plcoding.spotifycloneyt.other.Status
 import com.plcoding.spotifycloneyt.other.Status.*
 import com.plcoding.spotifycloneyt.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
