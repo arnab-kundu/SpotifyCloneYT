@@ -9,10 +9,13 @@ import com.plcoding.spotifycloneyt.exoplayer.MusicService
 import com.plcoding.spotifycloneyt.exoplayer.MusicServiceConnection
 import com.plcoding.spotifycloneyt.exoplayer.currentPlaybackPosition
 import com.plcoding.spotifycloneyt.other.Constants.UPDATE_PLAYER_POSITION_INTERVAL
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SongViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SongViewModel @Inject constructor(
     musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
 
@@ -21,8 +24,8 @@ class SongViewModel @ViewModelInject constructor(
     private val _curSongDuration = MutableLiveData<Long>()
     val curSongDuration: LiveData<Long> = _curSongDuration
 
-    private val _curPlayerPosition = MutableLiveData<Long>()
-    val curPlayerPosition: LiveData<Long> = _curPlayerPosition
+    private val _curPlayerPosition = MutableLiveData<Long?>()
+    val curPlayerPosition: MutableLiveData<Long?> = _curPlayerPosition
 
     init {
         updateCurrentPlayerPosition()

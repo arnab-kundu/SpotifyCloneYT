@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.plcoding.spotifycloneyt.R
 import com.plcoding.spotifycloneyt.data.entities.Song
-import kotlinx.android.synthetic.main.list_item.view.*
 
 abstract class BaseSongAdapter(
     private val layoutId: Int

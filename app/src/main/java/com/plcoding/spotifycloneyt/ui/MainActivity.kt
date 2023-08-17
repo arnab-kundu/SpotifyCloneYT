@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
@@ -12,13 +13,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.plcoding.spotifycloneyt.R
 import com.plcoding.spotifycloneyt.adapters.SwipeSongAdapter
 import com.plcoding.spotifycloneyt.data.entities.Song
+import com.plcoding.spotifycloneyt.databinding.ActivityMainBinding
 import com.plcoding.spotifycloneyt.exoplayer.isPlaying
 import com.plcoding.spotifycloneyt.exoplayer.toSong
 import com.plcoding.spotifycloneyt.other.Status
 import com.plcoding.spotifycloneyt.other.Status.*
 import com.plcoding.spotifycloneyt.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,15 +36,17 @@ class MainActivity : AppCompatActivity() {
     private var curPlayingSong: Song? = null
 
     private var playbackState: PlaybackStateCompat? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         subscribeToObservers()
 
-        vpSong.adapter = swipeSongAdapter
+        binding.vpSong.adapter = swipeSongAdapter
 
-        vpSong.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.vpSong.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if(playbackState?.isPlaying == true) {
@@ -54,19 +57,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        ivPlayPause.setOnClickListener {
+        binding.ivPlayPause.setOnClickListener {
             curPlayingSong?.let {
                 mainViewModel.playOrToggleSong(it, true)
             }
         }
 
         swipeSongAdapter.setItemClickListener {
-            navHostFragment.findNavController().navigate(
+            binding.flFragmentContainer.findNavController().navigate(
                 R.id.globalActionToSongFragment
             )
         }
 
-        navHostFragment.findNavController().addOnDestinationChangedListener { _, destination, _ ->
+        binding.flFragmentContainer.findNavController().addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id) {
                 R.id.songFragment -> hideBottomBar()
                 R.id.homeFragment -> showBottomBar()
@@ -76,21 +79,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hideBottomBar() {
-        ivCurSongImage.isVisible = false
-        vpSong.isVisible = false
-        ivPlayPause.isVisible = false
+        binding.ivCurSongImage.isVisible = false
+        binding.vpSong.isVisible = false
+        binding.ivPlayPause.isVisible = false
     }
 
     private fun showBottomBar() {
-        ivCurSongImage.isVisible = true
-        vpSong.isVisible = true
-        ivPlayPause.isVisible = true
+        binding.ivCurSongImage.isVisible = true
+        binding.vpSong.isVisible = true
+        binding.ivPlayPause.isVisible = true
     }
 
     private fun switchViewPagerToCurrentSong(song: Song) {
         val newItemIndex = swipeSongAdapter.songs.indexOf(song)
         if (newItemIndex != -1) {
-            vpSong.currentItem = newItemIndex
+            binding.vpSong.currentItem = newItemIndex
             curPlayingSong = song
         }
     }
@@ -104,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                             swipeSongAdapter.songs = songs
                             if (songs.isNotEmpty()) {
                                 glide.load((curPlayingSong ?: songs[0]).imageUrl)
-                                    .into(ivCurSongImage)
+                                    .into(binding.ivCurSongImage)
                             }
                             switchViewPagerToCurrentSong(curPlayingSong ?: return@observe)
                         }
@@ -118,12 +121,12 @@ class MainActivity : AppCompatActivity() {
             if (it == null) return@observe
 
             curPlayingSong = it.toSong()
-            glide.load(curPlayingSong?.imageUrl).into(ivCurSongImage)
+            glide.load(curPlayingSong?.imageUrl).into(binding.ivCurSongImage)
             switchViewPagerToCurrentSong(curPlayingSong ?: return@observe)
         }
         mainViewModel.playbackState.observe(this) {
             playbackState = it
-            ivPlayPause.setImageResource(
+            binding.ivPlayPause.setImageResource(
                 if (playbackState?.isPlaying == true) R.drawable.ic_pause else R.drawable.ic_play
             )
         }
@@ -131,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             it?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     ERROR -> Snackbar.make(
-                        rootLayout,
+                        binding.rootLayout,
                         result.message ?: "An unknown error occured",
                         Snackbar.LENGTH_LONG
                     ).show()
@@ -143,7 +146,7 @@ class MainActivity : AppCompatActivity() {
             it?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     ERROR -> Snackbar.make(
-                        rootLayout,
+                        binding.rootLayout,
                         result.message ?: "An unknown error occured",
                         Snackbar.LENGTH_LONG
                     ).show()

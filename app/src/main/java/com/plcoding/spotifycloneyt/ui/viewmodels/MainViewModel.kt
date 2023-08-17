@@ -14,8 +14,11 @@ import com.plcoding.spotifycloneyt.exoplayer.isPlaying
 import com.plcoding.spotifycloneyt.exoplayer.isPrepared
 import com.plcoding.spotifycloneyt.other.Constants.MEDIA_ROOT_ID
 import com.plcoding.spotifycloneyt.other.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MainViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val musicServiceConnection: MusicServiceConnection
 ) : ViewModel() {
     private val _mediaItems = MutableLiveData<Resource<List<Song>>>()

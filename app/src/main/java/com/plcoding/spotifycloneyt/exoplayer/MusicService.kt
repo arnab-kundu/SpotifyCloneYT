@@ -3,6 +3,7 @@ package com.plcoding.spotifycloneyt.exoplayer
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
+import android.service.media.MediaBrowserService
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
@@ -65,7 +66,7 @@ class MusicService : MediaBrowserServiceCompat() {
         }
 
         val activityIntent = packageManager?.getLaunchIntentForPackage(packageName)?.let {
-            PendingIntent.getActivity(this, 0, it, 0)
+            PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
 
         mediaSession = MediaSessionCompat(this, SERVICE_TAG).apply {
@@ -136,8 +137,8 @@ class MusicService : MediaBrowserServiceCompat() {
         clientPackageName: String,
         clientUid: Int,
         rootHints: Bundle?
-    ): BrowserRoot? {
-        return BrowserRoot(MEDIA_ROOT_ID, null)
+    ): MediaBrowserServiceCompat.BrowserRoot {
+        return MediaBrowserServiceCompat.BrowserRoot(MEDIA_ROOT_ID, null)
     }
 
     override fun onLoadChildren(

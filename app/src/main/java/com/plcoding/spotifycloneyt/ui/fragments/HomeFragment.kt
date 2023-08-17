@@ -8,10 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.plcoding.spotifycloneyt.R
 import com.plcoding.spotifycloneyt.adapters.SongAdapter
+import com.plcoding.spotifycloneyt.databinding.FragmentHomeBinding
+import com.plcoding.spotifycloneyt.databinding.FragmentSongBinding
 import com.plcoding.spotifycloneyt.other.Status
 import com.plcoding.spotifycloneyt.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,9 +22,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     @Inject
     lateinit var songAdapter: SongAdapter
-
+    private lateinit var binding: FragmentHomeBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentHomeBinding.inflate(layoutInflater)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
         setupRecyclerView()
         subscribeToObservers()
@@ -33,7 +35,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
     }
 
-    private fun setupRecyclerView() = rvAllSongs.apply {
+    private fun setupRecyclerView() = binding.rvAllSongs.apply {
         adapter = songAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -42,13 +44,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         mainViewModel.mediaItems.observe(viewLifecycleOwner) { result ->
             when(result.status) {
                 Status.SUCCESS -> {
-                    allSongsProgressBar.isVisible = false
+                    binding.allSongsProgressBar.isVisible = false
                     result.data?.let { songs ->
                         songAdapter.songs = songs
                     }
                 }
                 Status.ERROR -> Unit
-                Status.LOADING -> allSongsProgressBar.isVisible = true
+                Status.LOADING -> binding.allSongsProgressBar.isVisible = true
             }
         }
     }
