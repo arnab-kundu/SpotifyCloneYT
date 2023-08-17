@@ -8,6 +8,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.MediaMetadataCompat.*
 import android.util.Log
 import androidx.core.net.toUri
+import com.plcoding.spotifycloneyt.data.remote.SongDataProvider
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
@@ -25,7 +26,8 @@ class FirebaseMusicSource @Inject constructor(
 
     suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
         state = STATE_INITIALIZING
-        val allSongs = musicDatabase.getAllSongs()
+        //val allSongs = musicDatabase.getAllSongs()
+        val allSongs = SongDataProvider.kkSongList
         songs = allSongs.map { song ->
             MediaMetadataCompat.Builder()
                 .putString(METADATA_KEY_ARTIST, song.subtitle)
