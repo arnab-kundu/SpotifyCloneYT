@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirebaseMusicSource @Inject constructor(
-    private val musicDatabase: MusicDatabase
+ /*   private val musicDatabase: MusicDatabase*/
 ){
 
     var songs = emptyList<MediaMetadataCompat>()
