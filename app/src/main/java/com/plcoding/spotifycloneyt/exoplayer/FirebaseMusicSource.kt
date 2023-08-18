@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.plcoding.spotifycloneyt.data.remote.MusicDatabase
+import com.plcoding.spotifycloneyt.data.remote.SongDataProvider
 import com.plcoding.spotifycloneyt.exoplayer.State.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +26,8 @@ class FirebaseMusicSource @Inject constructor(
 
     suspend fun fetchMediaData() = withContext(Dispatchers.IO) {
         state = STATE_INITIALIZING
-        val allSongs = musicDatabase.getAllSongs()
+        //val allSongs = musicDatabase.getAllSongs()
+        val allSongs = SongDataProvider.kkSongList
         songs = allSongs.map { song ->
             MediaMetadataCompat.Builder()
                 .putString(METADATA_KEY_ARTIST, song.subtitle)
