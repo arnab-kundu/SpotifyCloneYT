@@ -18,7 +18,6 @@ import com.plcoding.spotifycloneyt.exoplayer.toSong
 import com.plcoding.spotifycloneyt.other.Status.*
 import com.plcoding.spotifycloneyt.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
